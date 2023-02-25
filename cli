@@ -182,16 +182,12 @@ cli_suites_run_usage() {
   fi
 
   printf "%s\n" "Usage:"
-  printf "  cli suites run [OPTIONS]\n"
+  printf "  cli suites run SUITE [OPTIONS]\n"
   printf "  cli suites run --help | -h\n"
   echo
 
   if [[ -n $long_usage ]]; then
     printf "%s\n" "Options:"
-
-    printf "  %s\n" "--suite ID (required)"
-    printf "    An ID for the test suite to execute\n"
-    echo
 
     printf "  %s\n" "--no-wait"
     printf "    Exits after submitting, without waiting for test execution to\n    complete\n"
@@ -215,6 +211,12 @@ cli_suites_run_usage() {
 
     printf "  %s\n" "--help, -h"
     printf "    Show this help\n"
+    echo
+
+    printf "%s\n" "Arguments:"
+
+    printf "  %s\n" "SUITE"
+    printf "    An ID for the test suite to execute\n"
     echo
 
   fi
@@ -640,19 +642,6 @@ cli_suites_run_parse_requirements() {
     key="$1"
     case "$key" in
 
-      --suite)
-
-        if [[ -n ${2+x} ]]; then
-
-          args['--suite']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--suite requires an argument: --suite ID" >&2
-          exit 1
-        fi
-        ;;
-
       --no-wait)
 
         args['--no-wait']=1
@@ -732,16 +721,22 @@ cli_suites_run_parse_requirements() {
 
       *)
 
-        printf "invalid argument: %s\n" "$key" >&2
-        exit 1
+        if [[ -z ${args['suite']+x} ]]; then
+
+          args['suite']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
 
         ;;
 
     esac
   done
 
-  if [[ -z ${args['--suite']+x} ]]; then
-    printf "missing required flag: --suite ID\n" >&2
+  if [[ -z ${args['suite']+x} ]]; then
+    printf "missing required argument: SUITE\nusage: cli suites run SUITE [OPTIONS]\n" >&2
     exit 1
   fi
 

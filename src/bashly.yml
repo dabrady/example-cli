@@ -67,12 +67,11 @@ commands:
 
     - name: run
       help: Submits a test suite, or subset of its tests, for execution.
+      args:
+      - name: suite
+        help: An ID for the test suite to execute
+        required: true
       flags:
-        - long: --suite
-          help: An ID for the test suite to execute
-          required: true
-          arg: id
-
         - long: --no-wait
           help: |
             Exits after submitting, without waiting for test execution to
