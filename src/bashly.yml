@@ -1,0 +1,112 @@
+name: cli
+help: Because you deserve it.
+import: src/version.yml
+
+flags:
+- long: --quiet
+  short: -q
+  help: |
+    Displays less and possibly no output. Has no effect if '--json' is also
+    specified
+
+- long: --auth-file
+  help: |
+    Specifies the path to a file containing identifying information for the
+    authority with which actions should be taken (overrides path specified
+    in config file and env var)
+
+- long: --json
+  help: |
+    Displays all STDOUT output as JSON (messages to STDERR will still print
+    as normal, but also be included in the final JSON report)
+
+- long: --interactive
+  help: |
+    Tips the CLI out of its default hands-free, fire-and-forget, non-
+    interactive mode (which is useful for CI integrations and scripting) to
+    one better-suited to human usage.
+
+commands:
+- name: self-update
+  help: |
+    Downloads the specified version of this CLI and replaces this one on your
+    local machine. Depending on where you put your installation, 'sudo' may be
+    required.
+
+    Only one of '--latest' or '--version' may be provided, and '--latest' is
+    assumed if neither are given.
+
+    Does nothing if you're already running the specified version.
+  flags:
+    - long: --force
+      help: |
+        Just install it, or die trying: don't worry if it's the same one you
+        already have.
+
+    - long: --latest
+      help: Install the latest release of this CLI.
+      conflicts: [--version]
+
+    - long: --version
+      help: The version of the CLI to install.
+      conflicts: [--latest]
+      arg: version-tag
+
+- name: suites
+  help: Tools for exploring, monitoring, and executing your test suites.
+
+  commands:
+    - name: ls
+      help: |
+        Lists accessible test suites, or the contents of a particular test
+        suite if provided
+      args:
+        - name: suite-id
+          help: |
+            (optional) An ID for the test suite whose contents should be listed
+
+    - name: run
+      help: Submits a test suite, or subset of its tests, for execution.
+      flags:
+        - long: --suite
+          help: An ID for the test suite to execute
+          required: true
+          arg: id
+
+        - long: --no-wait
+          help: |
+            Exits after submitting, without waiting for test execution to
+            complete
+
+        - long: --test
+          help: |
+            An ID for a test in the given suite to execute. May be used
+            multiple times to run a larger subset of the given test suite.
+          repeatable: true
+          arg: id
+
+        - long: --origin
+          help: Overrides the origin URL from which the tests will start
+          arg: url
+
+        - long: --retries
+          help: |
+           Zero or a positive integer specifying how many times to retry a
+           failing test before giving up (min: 0, max: 3)
+          arg: num
+          validate: integer
+
+        - long: --concurrency
+          help: |
+            Zero or positive integer specifying how many universes split your
+            test execution across
+          arg: num
+          validate: integer
+
+    - name: progress
+      help: Reports the latest progress of a given test execution.
+      flags:
+        - long: --execution
+          help: An ID for a test execution whose progress to inspect
+          required: true
+          arg: id
