@@ -29,8 +29,7 @@ cli_usage() {
   echo
 
   printf "%s\n" "Commands:"
-  printf "  %s   Downloads the specified version of this CLI and replaces this one on your\n" "self-update"
-  printf "  %s   Tools for exploring, monitoring, and executing your test suites.\n" "suites     "
+  printf "  %s   Tools for exploring, monitoring, and executing your test suites.\n" "suites"
   echo
 
   if [[ -n $long_usage ]]; then
@@ -57,47 +56,6 @@ cli_usage() {
     echo
     printf "  %s\n" "--version, -v"
     printf "    Show version number\n"
-    echo
-
-  fi
-}
-
-cli_self_update_usage() {
-  if [[ -n $long_usage ]]; then
-    printf "cli self-update\n"
-    echo
-
-    printf "  Downloads the specified version of this CLI and replaces this one on your\n  local machine. Depending on where you put your installation, 'sudo' may be\n  required.\n  \n  Only one of '--latest' or '--version' may be provided, and '--latest' is\n  assumed if neither are given.\n  \n  Does nothing if you're already running the specified version.\n"
-    echo
-
-  else
-    printf "cli self-update - Downloads the specified version of this CLI and replaces this one on your\n"
-    echo
-
-  fi
-
-  printf "%s\n" "Usage:"
-  printf "  cli self-update [OPTIONS]\n"
-  printf "  cli self-update --help | -h\n"
-  echo
-
-  if [[ -n $long_usage ]]; then
-    printf "%s\n" "Options:"
-
-    printf "  %s\n" "--force"
-    printf "    Just install it, or die trying: don't worry if it's the same one you\n    already have.\n"
-    echo
-
-    printf "  %s\n" "--latest"
-    printf "    Install the latest release of this CLI.\n"
-    echo
-
-    printf "  %s\n" "--version VERSION-TAG"
-    printf "    The version of the CLI to install.\n"
-    echo
-
-    printf "  %s\n" "--help, -h"
-    printf "    Show this help\n"
     echo
 
   fi
@@ -295,14 +253,6 @@ inspect_args() {
   fi
 }
 
-cli_self_update_command() {
-  echo "# this file is located in 'src/self_update_command.sh'"
-  echo "# code for 'cli self-update' goes here"
-  echo "# you can edit it freely and regenerate (it will not be overwritten)"
-  inspect_args
-
-}
-
 cli_suites_ls_command() {
   echo "# this file is located in 'src/suites_ls_command.sh'"
   echo "# code for 'cli suites ls' goes here"
@@ -375,13 +325,6 @@ parse_requirements() {
   case $action in
     -*) ;;
 
-    self-update)
-      action="self-update"
-      shift
-      cli_self_update_parse_requirements "$@"
-      shift $#
-      ;;
-
     suites)
       action="suites"
       shift
@@ -404,81 +347,6 @@ parse_requirements() {
   while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
-
-      -?*)
-        printf "invalid option: %s\n" "$key" >&2
-        exit 1
-        ;;
-
-      *)
-
-        printf "invalid argument: %s\n" "$key" >&2
-        exit 1
-
-        ;;
-
-    esac
-  done
-
-}
-
-cli_self_update_parse_requirements() {
-
-  while [[ $# -gt 0 ]]; do
-    case "${1:-}" in
-      --help | -h)
-        long_usage=yes
-        cli_self_update_usage
-        exit
-        ;;
-
-      *)
-        break
-        ;;
-
-    esac
-  done
-
-  action="self-update"
-
-  while [[ $# -gt 0 ]]; do
-    key="$1"
-    case "$key" in
-
-      --force)
-
-        args['--force']=1
-        shift
-        ;;
-
-      --latest)
-
-        if [[ -n "${args['--version']:-}" ]]; then
-          printf "conflicting options: %s cannot be used with %s\n" "$key" "--version" >&2
-          exit 1
-        fi
-
-        args['--latest']=1
-        shift
-        ;;
-
-      --version)
-
-        if [[ -n "${args['--latest']:-}" ]]; then
-          printf "conflicting options: %s cannot be used with %s\n" "$key" "--latest" >&2
-          exit 1
-        fi
-
-        if [[ -n ${2+x} ]]; then
-
-          args['--version']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--version requires an argument: --version VERSION-TAG" >&2
-          exit 1
-        fi
-        ;;
 
       -?*)
         printf "invalid option: %s\n" "$key" >&2
@@ -816,15 +684,6 @@ run() {
   parse_requirements "${input[@]}"
 
   case "$action" in
-    "self-update")
-      if [[ ${args['--help']:-} ]]; then
-        long_usage=yes
-        cli_self_update_usage
-      else
-        cli_self_update_command
-      fi
-      ;;
-
     "suites")
       if [[ ${args['--help']:-} ]]; then
         long_usage=yes

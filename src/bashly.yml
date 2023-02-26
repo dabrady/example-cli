@@ -27,31 +27,6 @@ flags:
     one better-suited to human usage.
 
 commands:
-- name: self-update
-  help: |
-    Downloads the specified version of this CLI and replaces this one on your
-    local machine. Depending on where you put your installation, 'sudo' may be
-    required.
-
-    Only one of '--latest' or '--version' may be provided, and '--latest' is
-    assumed if neither are given.
-
-    Does nothing if you're already running the specified version.
-  flags:
-    - long: --force
-      help: |
-        Just install it, or die trying: don't worry if it's the same one you
-        already have.
-
-    - long: --latest
-      help: Install the latest release of this CLI.
-      conflicts: [--version]
-
-    - long: --version
-      help: The version of the CLI to install.
-      conflicts: [--latest]
-      arg: version-tag
-
 - name: suites
   help: Tools for exploring, monitoring, and executing your test suites.
 
