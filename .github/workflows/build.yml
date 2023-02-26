@@ -9,5 +9,5 @@ jobs:
       with:
         ruby-version: 2.7
     - run: |
-          gem intall bashly --pre
+          gem install bashly --pre
           bashly --help
