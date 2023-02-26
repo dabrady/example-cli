@@ -9,6 +9,13 @@ environment_variables:
     authority with which actions should be taken (can be overridden via the
     '--auth-file' flag).
 
+- name: noop
+  private: true
+  help: |
+    (for development) Prevents the CLI from having any side effects. Use this
+    in your tests to prevent things like outbound API calls and I/O operations
+    from being made, and use this in your implementation to gate such things.
+
 flags:
 - long: --quiet
   short: -q
@@ -32,6 +39,10 @@ flags:
     Tips the CLI out of its default hands-free, fire-and-forget, non-
     interactive mode (which is useful for CI integrations and scripting) to
     one better-suited to human usage.
+
+- long: --noop
+  help: |
+    Prevents the CLI from having any side effects.
 
 commands:
 - name: suites
