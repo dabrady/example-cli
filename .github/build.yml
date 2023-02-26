@@ -1,0 +1,13 @@
+name: Build and Test
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+    - run: |
+          gem intall bashly --pre
+          bashly --help
