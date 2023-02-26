@@ -8,6 +8,11 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7
-    - run: |
-          gem install bashly --pre
-          bashly --help
+    - run: gem install bashly --pre
+    - run: bashly validate --verbose
+    - run: bashly generate --env production
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: ./test/approve
