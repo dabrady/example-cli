@@ -57,48 +57,68 @@ commands:
         Lists accessible test suites, or the contents of a particular test
         suite if provided
       args:
-        - name: suite-id
-          help: |
-            (optional) An ID for the test suite whose contents should be listed
+      - name: suite-id
+        help: |
+          (optional) An ID for the test suite whose contents should be listed
+      examples: |
+        # List the test suites you have access to
+        $ cli suites ls
+
+        # List the tests of a specified test suite
+        $ cli suites ls aoeu1532eughf
 
     - name: run
       group: Management
       filename: suites/run_command.sh
       help: Submits a test suite, or subset of its tests, for execution.
       args:
-      - name: suite
+      - name: suite-id
         help: An ID for the test suite to execute
         required: true
       flags:
-        - long: --no-wait
-          help: |
-            Exits after submitting, without waiting for test execution to
-            complete
+      - long: --no-wait
+        help: |
+          Exits after submitting, without waiting for test execution to
+          complete
 
-        - long: --test
-          help: |
-            An ID for a test in the given suite to execute. May be used
-            multiple times to run a larger subset of the given test suite.
-          repeatable: true
-          arg: id
+      - long: --test
+        help: |
+          An ID for a test in the given suite to execute. May be used
+          multiple times to run a larger subset of the given test suite.
+        repeatable: true
+        arg: id
 
-        - long: --origin
-          help: Overrides the origin URL from which the tests will start
-          arg: url
+      - long: --origin
+        help: Overrides the origin URL from which the tests will start
+        arg: url
 
-        - long: --retries
-          help: |
-           Zero or a positive integer specifying how many times to retry a
-           failing test before giving up (min: 0, max: 3)
-          arg: num
-          validate: integer
+      - long: --retries
+        help: |
+         Zero or a positive integer specifying how many times to retry a
+         failing test before giving up (min: 0, max: 3)
+        arg: num
+        validate: integer
 
-        - long: --concurrency
-          help: |
-            Zero or positive integer specifying how many universes split your
-            test execution across
-          arg: num
-          validate: integer
+      - long: --concurrency
+        help: |
+          Zero or positive integer specifying how many universes split your
+          test execution across
+        arg: num
+        validate: integer
+      examples: |
+        # Run a specific test suite
+        $ cli suites run aoeu1532eughf
+
+        # Run a subset of a specific test suite
+        $ cli suites run aoeu1532eughf\\\\
+          --test fgchs3190\\\\
+          --test htnesh5667
+
+        # Run a subset of a specific test suite and don't wait for the results
+        $ cli suites run aoeu1532eughf\\\\
+          --test fgchs3190\\\\
+          --test htnesh5667\\\\
+          --no-wait
 
     - name: progress
       group: Inspection
@@ -112,3 +132,8 @@ commands:
       - name: execution
         help: An ID for a test execution whose progress to inspect
         required: true
+      examples: |
+        # Polling an execution
+        $ cli suites run --no-wait aoeu1532eughf
+        ...output, including execution ID '31eghf'...
+        $ cli suites progress 31eghf
