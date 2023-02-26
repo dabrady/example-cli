@@ -101,11 +101,6 @@ commands:
           validate: integer
 
     - name: progress
-      flags:
-        - long: --execution
-          help: An ID for a test execution whose progress to inspect
-          required: true
-          arg: id
       group: Inspection
       filename: suites/progress_command.sh
       help: |
@@ -113,3 +108,7 @@ commands:
 
         Execution IDs are obtained from the output of the \`suites run\`
         command.
+      args:
+      - name: execution
+        help: An ID for a test execution whose progress to inspect
+        required: true
