@@ -2,6 +2,13 @@ name: cli
 help: Because you deserve it.
 import: src/version.yml
 
+environment_variables:
+- name: auth_file
+  help: |
+    Specifies the path to a file containing identifying information for the
+    authority with which actions should be taken (can be overridden via the
+    '--auth-file' flag).
+
 flags:
 - long: --quiet
   short: -q
@@ -13,7 +20,7 @@ flags:
   help: |
     Specifies the path to a file containing identifying information for the
     authority with which actions should be taken (overrides path specified
-    in config file and env var)
+    by the 'AUTH_FILE' environment variable)
 
 - long: --json
   help: |
