@@ -28,6 +28,7 @@ flags:
     Specifies the path to a file containing identifying information for the
     authority with which actions should be taken (overrides path specified
     by the 'AUTH_FILE' environment variable)
+  arg: path
 
 - long: --json
   help: |
