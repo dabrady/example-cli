@@ -39,8 +39,8 @@ cli_usage() {
     printf "    Displays less and possibly no output. Has no effect if '--json' is also\n    specified\n"
     echo
 
-    printf "  %s\n" "--auth-file"
-    printf "    Specifies the path to a file containing identifying information for the\n    authority with which actions should be taken (overrides path specified\n    in config file and env var)\n"
+    printf "  %s\n" "--auth-file PATH"
+    printf "    Specifies the path to a file containing identifying information for the\n    authority with which actions should be taken (overrides path specified\n    by the 'AUTH_FILE' environment variable)\n"
     echo
 
     printf "  %s\n" "--json"
@@ -51,11 +51,21 @@ cli_usage() {
     printf "    Tips the CLI out of its default hands-free, fire-and-forget, non-\n    interactive mode (which is useful for CI integrations and scripting) to\n    one better-suited to human usage.\n"
     echo
 
+    printf "  %s\n" "--noop"
+    printf "    Prevents the CLI from having any side effects.\n"
+    echo
+
     printf "  %s\n" "--help, -h"
     printf "    Show this help\n"
     echo
     printf "  %s\n" "--version, -v"
     printf "    Show version number\n"
+    echo
+
+    printf "%s\n" "Environment Variables:"
+
+    printf "  %s\n" "AUTH_FILE"
+    printf "    Specifies the path to a file containing identifying information for the\n    authority with which actions should be taken (can be overridden via the\n    '--auth-file' flag).\n"
     echo
 
   fi
@@ -77,10 +87,12 @@ cli_suites_usage() {
   printf "  cli suites [COMMAND] --help | -h\n"
   echo
 
-  printf "%s\n" "Commands:"
+  printf "%s\n" "Inspection Commands:"
   printf "  %s   Lists accessible test suites, or the contents of a particular test\n" "ls      "
-  printf "  %s   Submits a test suite, or subset of its tests, for execution.\n" "run     "
   printf "  %s   Reports the latest progress of a given test execution.\n" "progress"
+  echo
+  printf "%s\n" "Management Commands:"
+  printf "  %s   Submits a test suite, or subset of its tests, for execution.\n" "run     "
   echo
 
   if [[ -n $long_usage ]]; then
@@ -125,6 +137,10 @@ cli_suites_ls_usage() {
     printf "    (optional) An ID for the test suite whose contents should be listed\n"
     echo
 
+    printf "%s\n" "Examples:"
+    printf "  # List the test suites you have access to\n  $ cli suites ls\n  \n  # List the tests of a specified test suite\n  $ cli suites ls aoeu1532eughf\n"
+    echo
+
   fi
 }
 
@@ -140,7 +156,7 @@ cli_suites_run_usage() {
   fi
 
   printf "%s\n" "Usage:"
-  printf "  cli suites run SUITE [OPTIONS]\n"
+  printf "  cli suites run SUITE-ID [OPTIONS]\n"
   printf "  cli suites run --help | -h\n"
   echo
 
@@ -173,8 +189,12 @@ cli_suites_run_usage() {
 
     printf "%s\n" "Arguments:"
 
-    printf "  %s\n" "SUITE"
+    printf "  %s\n" "SUITE-ID"
     printf "    An ID for the test suite to execute\n"
+    echo
+
+    printf "%s\n" "Examples:"
+    printf "  # Run a specific test suite\n  $ cli suites run aoeu1532eughf\n  \n  # Run a subset of a specific test suite\n  $ cli suites run aoeu1532eughf\\\\\n    --test fgchs3190\\\\\n    --test htnesh5667\n  \n  # Run a subset of a specific test suite and don't wait for the results\n  $ cli suites run aoeu1532eughf\\\\\n    --test fgchs3190\\\\\n    --test htnesh5667\\\\\n    --no-wait\n"
     echo
 
   fi
@@ -182,7 +202,10 @@ cli_suites_run_usage() {
 
 cli_suites_progress_usage() {
   if [[ -n $long_usage ]]; then
-    printf "cli suites progress - Reports the latest progress of a given test execution.\n"
+    printf "cli suites progress\n"
+    echo
+
+    printf "  Reports the latest progress of a given test execution.\n  \n  Execution IDs are obtained from the output of the \`suites run\`\n  command.\n"
     echo
 
   else
@@ -192,19 +215,25 @@ cli_suites_progress_usage() {
   fi
 
   printf "%s\n" "Usage:"
-  printf "  cli suites progress [OPTIONS]\n"
+  printf "  cli suites progress EXECUTION\n"
   printf "  cli suites progress --help | -h\n"
   echo
 
   if [[ -n $long_usage ]]; then
     printf "%s\n" "Options:"
 
-    printf "  %s\n" "--execution ID (required)"
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    printf "%s\n" "Arguments:"
+
+    printf "  %s\n" "EXECUTION"
     printf "    An ID for a test execution whose progress to inspect\n"
     echo
 
-    printf "  %s\n" "--help, -h"
-    printf "    Show this help\n"
+    printf "%s\n" "Examples:"
+    printf "  # Polling an execution\n  $ cli suites run --no-wait aoeu1532eughf\n  ...output, including execution ID '31eghf'...\n  $ cli suites progress 31eghf\n"
     echo
 
   fi
@@ -254,7 +283,7 @@ inspect_args() {
 }
 
 cli_suites_ls_command() {
-  echo "# this file is located in 'src/suites_ls_command.sh'"
+  echo "# this file is located in 'src/suites/ls_command.sh'"
   echo "# code for 'cli suites ls' goes here"
   echo "# you can edit it freely and regenerate (it will not be overwritten)"
   inspect_args
@@ -262,12 +291,15 @@ cli_suites_ls_command() {
 }
 
 cli_suites_run_command() {
-  echo "Running all the things!"
+  echo "# this file is located in 'src/suites/run_command.sh'"
+  echo "# code for 'cli suites run' goes here"
+  echo "# you can edit it freely and regenerate (it will not be overwritten)"
+  inspect_args
 
 }
 
 cli_suites_progress_command() {
-  echo "# this file is located in 'src/suites_progress_command.sh'"
+  echo "# this file is located in 'src/suites/progress_command.sh'"
   echo "# code for 'cli suites progress' goes here"
   echo "# you can edit it freely and regenerate (it will not be overwritten)"
   inspect_args
@@ -297,8 +329,15 @@ parse_requirements() {
 
       --auth-file)
 
-        args['--auth-file']=1
-        shift
+        if [[ -n ${2+x} ]]; then
+
+          args['--auth-file']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--auth-file requires an argument: --auth-file PATH" >&2
+          exit 1
+        fi
         ;;
 
       --json)
@@ -310,6 +349,12 @@ parse_requirements() {
       --interactive)
 
         args['--interactive']=1
+        shift
+        ;;
+
+      --noop)
+
+        args['--noop']=1
         shift
         ;;
 
@@ -589,9 +634,9 @@ cli_suites_run_parse_requirements() {
 
       *)
 
-        if [[ -z ${args['suite']+x} ]]; then
+        if [[ -z ${args['suite-id']+x} ]]; then
 
-          args['suite']=$1
+          args['suite-id']=$1
           shift
         else
           printf "invalid argument: %s\n" "$key" >&2
@@ -603,8 +648,8 @@ cli_suites_run_parse_requirements() {
     esac
   done
 
-  if [[ -z ${args['suite']+x} ]]; then
-    printf "missing required argument: SUITE\nusage: cli suites run SUITE [OPTIONS]\n" >&2
+  if [[ -z ${args['suite-id']+x} ]]; then
+    printf "missing required argument: SUITE-ID\nusage: cli suites run SUITE-ID [OPTIONS]\n" >&2
     exit 1
   fi
 
@@ -633,19 +678,6 @@ cli_suites_progress_parse_requirements() {
     key="$1"
     case "$key" in
 
-      --execution)
-
-        if [[ -n ${2+x} ]]; then
-
-          args['--execution']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--execution requires an argument: --execution ID" >&2
-          exit 1
-        fi
-        ;;
-
       -?*)
         printf "invalid option: %s\n" "$key" >&2
         exit 1
@@ -653,16 +685,22 @@ cli_suites_progress_parse_requirements() {
 
       *)
 
-        printf "invalid argument: %s\n" "$key" >&2
-        exit 1
+        if [[ -z ${args['execution']+x} ]]; then
+
+          args['execution']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
 
         ;;
 
     esac
   done
 
-  if [[ -z ${args['--execution']+x} ]]; then
-    printf "missing required flag: --execution ID\n" >&2
+  if [[ -z ${args['execution']+x} ]]; then
+    printf "missing required argument: EXECUTION\nusage: cli suites progress EXECUTION\n" >&2
     exit 1
   fi
 
