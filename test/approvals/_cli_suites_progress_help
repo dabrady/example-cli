@@ -1,0 +1,24 @@
+cli suites progress
+
+  Reports the latest progress of a given test execution.
+  
+  Execution IDs are obtained from the output of the `suites run`
+  command.
+
+Usage:
+  cli suites progress EXECUTION
+  cli suites progress --help | -h
+
+Options:
+  --help, -h
+    Show this help
+
+Arguments:
+  EXECUTION
+    An ID for a test execution whose progress to inspect
+
+Examples:
+  # Polling an execution
+  $ cli suites run --no-wait aoeu1532eughf
+  ...output, including execution ID '31eghf'...
+  $ cli suites progress 31eghf

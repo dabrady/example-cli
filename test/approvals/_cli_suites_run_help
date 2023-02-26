@@ -1,0 +1,47 @@
+cli suites run - Submits a test suite, or subset of its tests, for execution.
+
+Usage:
+  cli suites run SUITE-ID [OPTIONS]
+  cli suites run --help | -h
+
+Options:
+  --no-wait
+    Exits after submitting, without waiting for test execution to
+    complete
+
+  --test ID (repeatable)
+    An ID for a test in the given suite to execute. May be used
+    multiple times to run a larger subset of the given test suite.
+
+  --origin URL
+    Overrides the origin URL from which the tests will start
+
+  --retries NUM
+    Zero or a positive integer specifying how many times to retry a
+    failing test before giving up (min: 0, max: 3)
+
+  --concurrency NUM
+    Zero or positive integer specifying how many universes split your
+    test execution across
+
+  --help, -h
+    Show this help
+
+Arguments:
+  SUITE-ID
+    An ID for the test suite to execute
+
+Examples:
+  # Run a specific test suite
+  $ cli suites run aoeu1532eughf
+  
+  # Run a subset of a specific test suite
+  $ cli suites run aoeu1532eughf\
+    --test fgchs3190\
+    --test htnesh5667
+  
+  # Run a subset of a specific test suite and don't wait for the results
+  $ cli suites run aoeu1532eughf\
+    --test fgchs3190\
+    --test htnesh5667\
+    --no-wait

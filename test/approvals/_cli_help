@@ -1,0 +1,43 @@
+cli - Because you deserve it.
+
+Usage:
+  cli [OPTIONS] COMMAND
+  cli [COMMAND] --help | -h
+  cli --version | -v
+
+Commands:
+  suites   Tools for exploring, monitoring, and executing your test suites.
+
+Options:
+  --quiet, -q
+    Displays less and possibly no output. Has no effect if '--json' is also
+    specified
+
+  --auth-file PATH
+    Specifies the path to a file containing identifying information for the
+    authority with which actions should be taken (overrides path specified
+    by the 'AUTH_FILE' environment variable)
+
+  --json
+    Displays all STDOUT output as JSON (messages to STDERR will still print
+    as normal, but also be included in the final JSON report)
+
+  --interactive
+    Tips the CLI out of its default hands-free, fire-and-forget, non-
+    interactive mode (which is useful for CI integrations and scripting) to
+    one better-suited to human usage.
+
+  --noop
+    Prevents the CLI from having any side effects.
+
+  --help, -h
+    Show this help
+
+  --version, -v
+    Show version number
+
+Environment Variables:
+  AUTH_FILE
+    Specifies the path to a file containing identifying information for the
+    authority with which actions should be taken (can be overridden via the
+    '--auth-file' flag).

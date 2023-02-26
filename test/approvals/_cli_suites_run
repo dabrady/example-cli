@@ -1,0 +1,2 @@
+missing required argument: SUITE-ID
+usage: cli suites run SUITE-ID [OPTIONS]

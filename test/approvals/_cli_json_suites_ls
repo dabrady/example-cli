@@ -1,0 +1,5 @@
+# this file is located in 'src/suites/ls_command.sh'
+# code for 'cli suites ls' goes here
+# you can edit it freely and regenerate (it will not be overwritten)
+args:
+- ${args[--json]} = 1

@@ -1,25 +1,65 @@
 #!/usr/bin/env bash
-# Run this from the root directory
-
+# NOTE(dabrady) Run this from the project root directory
 cd ./test || exit
 source approvals.bash
 
-# Update me
-cli=./download
+### Helpers
 
-# Tests (context, describe and indentation are optional)
-context "when DEBUG is on"
-  export DEBUG=1
+# NOTE(dabrady) Don't edit this directly: update the `end` helper function.
+cli=
 
-  describe "root command"
-    approve "$cli"
-    approve "$cli --help"
+# Use this at the very beginning, prior to running any tests
+setup_test_env() {
+  export NOOP=true
+  TEST_FLAGS=
+  CLI="../cli${TEST_FLAGS}" # Path to CLI, relative to this file
 
-context "when DEBUG is off"
-  unset DEBUG
+  cli=$CLI
+}
 
-  describe "some other command"
-    approve "$cli other"
-    approve "$cli other --help"
+# Use at the end of a `context` block to reset to original test config
+end() {
+  setup_test_env
+}
 
-# ...more tests...
+### Tests (context, describe and indentation are optional)
+
+setup_test_env
+
+describe "root command"
+  approve "$cli"
+  approve "$cli --version"
+  approve "$cli --help"
+
+context 'when no global flags are specified'
+  describe 'command: `suites`'
+    approve "$cli suites"
+    approve "$cli suites --help"
+
+  describe 'command: `suites ls`'
+    approve "$cli suites ls"
+    approve "$cli suites ls --help"
+
+  describe 'command: `suites run`'
+    approve "$cli suites run"
+    approve "$cli suites run --help"
+
+  describe 'command: `suites progress`'
+    approve "$cli suites progress"
+    approve "$cli suites progress --help"
+end
+
+context 'when `--json` is specified'
+  ## Context Setup
+  cli="$cli --json"
+
+  ## Approvals
+  describe 'command: `suites ls`'
+    approve "$cli suites ls"
+
+  describe 'command: `suites run`'
+    approve "$cli suites run"
+
+  describe 'command: `suites progress`'
+    approve "$cli suites progress"
+end

@@ -1,0 +1,9 @@
+cli - Because you deserve it.
+
+Usage:
+  cli [OPTIONS] COMMAND
+  cli [COMMAND] --help | -h
+  cli --version | -v
+
+Commands:
+  suites   Tools for exploring, monitoring, and executing your test suites.

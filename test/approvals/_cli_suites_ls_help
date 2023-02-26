@@ -1,0 +1,23 @@
+cli suites ls
+
+  Lists accessible test suites, or the contents of a particular test
+  suite if provided
+
+Usage:
+  cli suites ls [SUITE-ID]
+  cli suites ls --help | -h
+
+Options:
+  --help, -h
+    Show this help
+
+Arguments:
+  SUITE-ID
+    (optional) An ID for the test suite whose contents should be listed
+
+Examples:
+  # List the test suites you have access to
+  $ cli suites ls
+  
+  # List the tests of a specified test suite
+  $ cli suites ls aoeu1532eughf
